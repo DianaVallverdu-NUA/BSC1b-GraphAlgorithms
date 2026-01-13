@@ -25,17 +25,12 @@ class Graph {
       }
 
       // case 2 - there is no selected node
-      this.#currentlySelectedId = this.nodes.indexOf(selectedNode);
-      this.nodes[this.#currentlySelectedId].selected = true;
-      selectedNodeSpan.innerHTML = this.#currentlySelectedId;
+      this.#selectNode(selectedNode);
       return;
     }
 
-    if (this.#currentlySelectedId != -1) {
-      this.nodes[this.#currentlySelectedId].selected = false;
-      this.#currentlySelectedId = -1;
-      selectedNodeSpan.innerHTML = '';
-    }
+    // unselect node if anything selected
+    this.#unselectNode();
 
     if (this.#overlappingNode(x, y)) return;
 
@@ -47,9 +42,8 @@ class Graph {
    * called at every main sketch draw
    */
   draw() {
-
     //update node values
-    for(let node of this.nodes) {
+    for (let node of this.nodes) {
       node.calculateVelocity(this.nodes);
       node.move();
     }
@@ -59,6 +53,19 @@ class Graph {
   }
 
   // =================== Drawing Functions ===================
+
+  #selectNode(nodeId) {
+    this.#currentlySelectedId = this.nodes.indexOf(nodeId);
+    this.nodes[this.#currentlySelectedId].selected = true;
+    selectedNodeSpan.innerHTML = this.#currentlySelectedId;
+  }
+
+  #unselectNode() {
+    if(this.#currentlySelectedId == -1) return;
+    this.nodes[this.#currentlySelectedId].selected = false;
+    this.#currentlySelectedId = -1;
+    selectedNodeSpan.innerHTML = '';
+  }
 
   /**
    * Check if (x, y) is inside another node
@@ -127,9 +134,7 @@ class Graph {
     this.nodes[nodeOnePosition].addNeighbour(nodeTwoPosition);
     this.nodes[nodeTwoPosition].addNeighbour(nodeOnePosition);
 
-    this.nodes[this.#currentlySelectedId].selected = false;
-    this.#currentlySelectedId = -1;
-    selectedNodeSpan.innerHTML = '';
+    this.#unselectNode();
   }
 
   /**
