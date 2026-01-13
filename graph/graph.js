@@ -122,8 +122,8 @@ class Graph {
    * @param {*} nodeTwoPosition
    */
   #addEdge(nodeOnePosition, nodeTwoPosition) {
-    this.nodes[nodeOnePosition].neighbours.push(nodeTwoPosition);
-    this.nodes[nodeTwoPosition].neighbours.push(nodeTwoPosition);
+    this.nodes[nodeOnePosition].addNeighbour(nodeTwoPosition);
+    this.nodes[nodeTwoPosition].addNeighbour(nodeOnePosition);
 
     this.nodes[this.#currentlySelectedId].selected = false;
     this.#currentlySelectedId = -1;
