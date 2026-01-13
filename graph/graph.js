@@ -11,7 +11,7 @@ class Graph {
    */
   onClick(x, y) {
     // if out of bounds, return
-    if (this.#outOfBOunds(x, y) || this.#nearBorder(x, y)) return;
+    if (outOfBounds(x, y) || nearBorder(x, y)) return;
 
     // if coordinates are inside an existing node
     let selectedNode = this.#insideNode(x, y);
@@ -45,45 +45,18 @@ class Graph {
    * called at every main sketch draw
    */
   draw() {
+
+    //update node values
+    for(let node of this.nodes) {
+      node.calculateVelocity(this.nodes);
+      node.move();
+    }
+
     this.#drawNodes();
     this.#drawEdges();
   }
 
   // =================== Drawing Functions ===================
-  /**
-   * Check if (x, y) is outside canvas bounds
-   * @param {Number} x
-   * @param {Number} y
-   * @return {boolean}
-   */
-  #outOfBOunds(x, y) {
-    let outisde = false;
-    if (x < 0 || x > width || y < 0 || y > height) outisde = true;
-  }
-
-  /**
-   * @param {Number} x
-   * @param {Number} y
-   * @return {boolean}
-   */
-  #nearBorder(x, y) {
-    let radius = nodeDiameter / 2;
-
-    // distance to each border
-    let distance = { left: x, top: y, right: width - x, bottom: height - y };
-
-    // check if any of the border distances are smaller than radius
-    let near = false;
-    if (
-      distance.left <= radius ||
-      distance.top <= radius ||
-      distance.right <= radius ||
-      distance.top <= radius
-    )
-      near = true;
-
-    return near;
-  }
 
   /**
    * Check if (x, y) is inside another node
