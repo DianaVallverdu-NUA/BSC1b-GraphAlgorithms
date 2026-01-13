@@ -58,6 +58,7 @@ class Graph {
     this.#currentlySelectedId = this.nodes.indexOf(nodeId);
     this.nodes[this.#currentlySelectedId].selected = true;
     selectedNodeSpan.innerHTML = this.#currentlySelectedId;
+    selectedNodeDegreeSpan.innerHTML = this.nodes[this.#currentlySelectedId].neighbours.length;
   }
 
   #unselectNode() {
@@ -65,6 +66,7 @@ class Graph {
     this.nodes[this.#currentlySelectedId].selected = false;
     this.#currentlySelectedId = -1;
     selectedNodeSpan.innerHTML = '';
+    selectedNodeDegreeSpan.innerHTML = '';
   }
 
   /**
