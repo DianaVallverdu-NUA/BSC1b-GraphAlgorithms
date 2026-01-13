@@ -17,7 +17,7 @@ class Node {
 
     if(nearBorder(this.x, this.y)) return;
 
-    if(this.#vel.x < 1 && this.#vel.y < 1) return;
+    if(abs(this.#vel.x) < 1.5 && abs(this.#vel.y) < 1.5) return;
 
     this.x = this.x + this.#vel.x;
     this.y = this.y + this.#vel.y;
@@ -46,8 +46,16 @@ class Node {
     }
 
     // add vertical / horizontal force
-    const vertical = height / 2 - this.y;
-    const horizontal = width / 2 - this.x;
+    let vertical = height / 2 - this.y;
+    console.log(vertical);
+    if((abs(vertical) < 250)){
+      vertical = 0;
+    }
+    console.log(vertical);
+    let horizontal = width / 2 - this.x;
+    if((abs(horizontal) < 250)) {
+      horizontal = 0;
+    }
 
     this.#vel.x += horizontal * 0.01;
     this.#vel.y += vertical* 0.01;
