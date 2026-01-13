@@ -1,6 +1,8 @@
 class Graph {
   nodes = [];
-  #currentId = -1;
+  #currentlySelectedId = -1;
+
+  selectedNode;
 
   // public functions
 
@@ -13,21 +15,22 @@ class Graph {
     // if out of bounds, return
     if (this.#outOfBOunds(x, y) || this.#nearBorder(x, y)) return;
 
-    if (this.#currentId != -1) {
-      // this.#currentId contains the previously selected node
-      // insideNode contains the newly selected nod
-      const insideNodeId = this.nodes.indexOf(insideNode);
-      this.#addEdge(this.#currentId, insideNodeId);
-      return;
-    }
-
     // if coordinates are inside an existing node
-    let insideNode = this.#insideNode(x, y);
+    let selectedNode = this.#insideNode(x, y);
 
-    if (insideNode) {
-      let selectedIndex = this.nodes.indexOf(insideNode);
-      this.nodes[selectedIndex].selected = true;
-      this.#currentId = selectedIndex;
+    if (selectedNode) {
+
+      // case 1 - there is a selected node
+      if (this.#currentlySelectedId != -1) {
+        console.log("selected node", selectedNode, "selected id", this.#currentlySelectedId);
+        const selectedId = this.nodes.indexOf(selectedNode);
+        this.#addEdge(this.#currentlySelectedId, selectedId);
+        return;
+      } 
+
+      // case 2 - there is no selected node
+      this.#currentlySelectedId = this.nodes.indexOf(selectedNode);
+      this.nodes[this.#currentlySelectedId].selected = true;
       return;
     }
 
@@ -121,7 +124,7 @@ class Graph {
   #drawEdges() {
     for (let node of this.nodes) {
       if (node.neighbour) {
-        let neighbourNode = this.nodes[node.neigbour];
+        let neighbourNode = this.nodes[node.neighbour];
         line(node.x, node.y, neighbourNode.x, neighbourNode.y);
       }
     }
