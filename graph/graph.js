@@ -57,6 +57,7 @@ class Graph {
   #outOfBOunds(x, y) {
     let outisde = false;
     if(x<0 || x>width || y<0 || y>height) outisde = true;
+    return outisde;
   }
 
   /**
@@ -144,14 +145,6 @@ class Graph {
     this.nodes[nodeTwoPosition].neighbour = nodeOnePosition;
   }
 
-  /**
-   * Add new node at (x, y)
-   * @param {Number} x 
-   * @param {Number} y 
-   */
-  #addNode(x, y) {
-    
-  }
 }
 
 let graph = new Graph();
