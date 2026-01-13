@@ -2,8 +2,6 @@ class Graph {
   nodes = [];
   #currentlySelectedId = -1;
 
-  selectedNode;
-
   // public functions
 
   /**
@@ -19,14 +17,12 @@ class Graph {
     let selectedNode = this.#insideNode(x, y);
 
     if (selectedNode) {
-
       // case 1 - there is a selected node
       if (this.#currentlySelectedId != -1) {
-        console.log("selected node", selectedNode, "selected id", this.#currentlySelectedId);
         const selectedId = this.nodes.indexOf(selectedNode);
         this.#addEdge(this.#currentlySelectedId, selectedId);
         return;
-      } 
+      }
 
       // case 2 - there is no selected node
       this.#currentlySelectedId = this.nodes.indexOf(selectedNode);
@@ -34,7 +30,7 @@ class Graph {
       return;
     }
 
-    this.nodes.push({ x, y });
+    this.nodes.push({ x, y, neighbours: [] });
   }
 
   /**
@@ -123,8 +119,8 @@ class Graph {
    */
   #drawEdges() {
     for (let node of this.nodes) {
-      if (node.neighbour) {
-        let neighbourNode = this.nodes[node.neighbour];
+      for (let neighbourId of node.neighbours) {
+        let neighbourNode = this.nodes[neighbourId];
         line(node.x, node.y, neighbourNode.x, neighbourNode.y);
       }
     }
@@ -138,8 +134,11 @@ class Graph {
    * @param {*} nodeTwoPosition
    */
   #addEdge(nodeOnePosition, nodeTwoPosition) {
-    this.nodes[nodeOnePosition].neighbour = nodeTwoPosition;
-    this.nodes[nodeTwoPosition].neighbour = nodeOnePosition;
+    this.nodes[nodeOnePosition].neighbours.push(nodeTwoPosition);
+    this.nodes[nodeTwoPosition].neighbours.push(nodeTwoPosition);
+
+    this.nodes[this.#currentlySelectedId].selected = false;
+    this.#currentlySelectedId = -1;
   }
 
   /**
