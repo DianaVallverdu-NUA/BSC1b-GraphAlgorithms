@@ -30,7 +30,15 @@ class Graph {
       return;
     }
 
-    this.nodes.push({ x, y, neighbours: [] });
+    if (this.#currentlySelectedId != -1) {
+      this.nodes[this.#currentlySelectedId].selected = false;
+      this.#currentlySelectedId = -1;
+    }
+
+    if (this.#overlappingNode(x, y)) return;
+
+    const newNode = new Node(x, y, this.nodes.length);
+    this.nodes.push(newNode);
   }
 
   /**
@@ -98,7 +106,14 @@ class Graph {
    * @param {Number} y
    * @return {boolean}
    */
-  #overlappingNode(x, y) {}
+  #overlappingNode(x, y) {
+    for (let node of this.nodes) {
+      if (squareDistance(x, y, node.x, node.y) < nodeDiameter ** 2) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   /**
    * draw all nodes that in canvas
