@@ -4,7 +4,7 @@ class Node {
   selected = false;
   neighbours = [];
 
-  #vel = { x: 0, y: 0 };
+  #step = { x: 0, y: 0 };
 
   constructor(x, y, id) {
     this.x = x;
@@ -29,14 +29,14 @@ class Node {
   move() {
     if (nearBorder(this.x, this.y)) return;
 
-    if (abs(this.#vel.x) < 1.5 && abs(this.#vel.y) < 1.5) return;
+    if (abs(this.#step.x) < 1.5 && abs(this.#step.y) < 1.5) return;
 
-    this.x = this.x + this.#vel.x;
-    this.y = this.y + this.#vel.y;
+    this.x = this.x + this.#step.x;
+    this.y = this.y + this.#step.y;
   }
 
-  calculateVelocity(nodes) {
-    this.#vel = { x: 0, y: 0 };
+  calculateStep(nodes) {
+    this.#step = { x: 0, y: 0 };
 
     for (let node of nodes) {
       // skip themselves
@@ -46,17 +46,17 @@ class Node {
       if (squareDistance(node.x, node.y, this.x, this.y) > 30000) continue;
 
       // square dist as measure of strength
-      const factor = 100 / squareDistance(node.x, node.y, this.x, this.y);
+      const factor = 1 / distance(node.x, node.y, this.x, this.y);
 
       // calculate strength
-      const force = {
+      const step = {
         x: (this.x - node.x) * factor,
         y: (this.y - node.y) * factor,
       };
 
       // vel = force for now
-      this.#vel.x += force.x;
-      this.#vel.y += force.y;
+      this.#step.x += step.x;
+      this.#step.y += step.y;
     }
 
     // add vertical / horizontal force
@@ -69,7 +69,7 @@ class Node {
       horizontal = 0;
     }
 
-    this.#vel.x += horizontal * 0.01;
-    this.#vel.y += vertical * 0.01;
+    this.#step.x += horizontal * 0.01;
+    this.#step.y += vertical * 0.01;
   }
 }

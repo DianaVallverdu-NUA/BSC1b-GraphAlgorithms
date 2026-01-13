@@ -32,8 +32,10 @@ class Graph {
     // unselect node if anything selected
     this.#unselectNode();
 
+    // ensure node not overlapping with existing node
     if (this.#overlappingNode(x, y)) return;
 
+    // add node to graph
     const newNode = new Node(x, y, this.nodes.length);
     this.nodes.push(newNode);
   }
@@ -44,7 +46,7 @@ class Graph {
   draw() {
     //update node values
     for (let node of this.nodes) {
-      node.calculateVelocity(this.nodes);
+      node.calculateStep(this.nodes);
       node.move();
     }
 
@@ -52,6 +54,10 @@ class Graph {
     this.#drawEdges();
   }
   
+  /**
+   * Check if graph is complete by ensuring all nodes have n - 1 neighbours
+   * @returns true if graph is complete, false otherwise
+   */
   isComplete() {
     for(let node of this.nodes) {
       if(node.neighbours.length < this.nodes.length - 1) return false;
@@ -64,6 +70,13 @@ class Graph {
   
   
 
+  /**
+   * Selects a node by:
+   * 1. Setting it as currently selectedd within graph info
+   * 2. Setting it as selected in the node object - so it is painted accordingly
+   * 3. Displaying node info to HTML
+   * @param {Number} nodeId id of the node to be set as selected 
+   */
   #selectNode(nodeId) {
     this.#currentlySelectedId = this.nodes.indexOf(nodeId);
     this.nodes[this.#currentlySelectedId].selected = true;
@@ -71,6 +84,12 @@ class Graph {
     selectedNodeDegreeSpan.innerHTML = this.nodes[this.#currentlySelectedId].neighbours.length;
   }
 
+  /**
+   * Check if there is a currently selected node, if true:
+   * 1. Set node selected property to false
+   * 2. Set currently selected node to -1 (= none selected)
+   * 3. Display empty inner html in the HTML info area
+   */
   #unselectNode() {
     if(this.#currentlySelectedId == -1) return;
     this.nodes[this.#currentlySelectedId].selected = false;
@@ -149,12 +168,6 @@ class Graph {
     this.#unselectNode();
   }
 
-  /**
-   * Add new node at (x, y)
-   * @param {Number} x
-   * @param {Number} y
-   */
-  #addNode(x, y) {}
 }
 
 let graph = new Graph();
