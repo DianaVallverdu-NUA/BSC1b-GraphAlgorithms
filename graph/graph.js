@@ -51,8 +51,18 @@ class Graph {
     this.#drawNodes();
     this.#drawEdges();
   }
+  
+  isComplete() {
+    for(let node of this.nodes) {
+      if(node.neighbours.length < this.nodes.length - 1) return false;
+    }
 
+    return true;
+  }
+  
   // =================== Drawing Functions ===================
+  
+  
 
   #selectNode(nodeId) {
     this.#currentlySelectedId = this.nodes.indexOf(nodeId);

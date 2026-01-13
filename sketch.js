@@ -7,6 +7,12 @@ function draw() {
   background(220);
 
   graph.draw();
+
+  if(graph.isComplete()) {
+    completeGraphSpan.innerHTML = '';
+  } else {
+    completeGraphSpan.innerHTML = 'not';
+  }
 }
 
 function mouseClicked() {
