@@ -27,12 +27,14 @@ class Graph {
       // case 2 - there is no selected node
       this.#currentlySelectedId = this.nodes.indexOf(selectedNode);
       this.nodes[this.#currentlySelectedId].selected = true;
+      selectedNodeSpan.innerHTML = this.#currentlySelectedId;
       return;
     }
 
     if (this.#currentlySelectedId != -1) {
       this.nodes[this.#currentlySelectedId].selected = false;
       this.#currentlySelectedId = -1;
+      selectedNodeSpan.innerHTML = '';
     }
 
     if (this.#overlappingNode(x, y)) return;
@@ -127,6 +129,7 @@ class Graph {
 
     this.nodes[this.#currentlySelectedId].selected = false;
     this.#currentlySelectedId = -1;
+    selectedNodeSpan.innerHTML = '';
   }
 
   /**

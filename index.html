@@ -2,13 +2,14 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>Sketch</title>
 
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="style.css" />
 
     <script src="helpers/helpers.js"></script>
+    <script src="helpers/webConstants.js" defer></script>
     <script src="graph/node.js"></script>
     <script src="graph/graph.js"></script>
     <script src="libraries/p5.min.js"></script>
@@ -20,6 +21,11 @@
       <h1>Graph Builder</h1>
     </div>
     <script src="sketch.js"></script>
-    <main></main>
+    <div class="container">
+      <div id="controlPanel">
+        <div>Selected Node: <span id="selectedNodeSpan"></span></div>
+      </div>
+      <main></main>
+    </div>
   </body>
 </html>
