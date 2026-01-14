@@ -15,28 +15,42 @@ class Graph {
 
     // if out of bounds, return
     if (outOfBOunds(x, y) || nearBorder(x, y)) return;
-
+    
     // if coordinates are inside an existing node
     let insideNode = this.#insideNode(x, y);
-
+    
     if (insideNode) {
       if (this.#currentId != -1) {
-
+        
         // this.#currentId contains the previously selected node
         // insideNode contains the newly selected node
         const insideNodeId = this.nodes.indexOf(insideNode);
+
+        // if it's the same node -> desselect and return
+        if(this.#currentId === insideNodeId) {
+          this.#deselectNode();
+          return;
+        }
+
         this.#addEdge(this.#currentId, insideNodeId);
         return;
       }
-
-
+      
+      
       let selectedIndex = this.nodes.indexOf(insideNode);
+
+      //set node to selected
       this.nodes[selectedIndex].selected = true;
       this.#currentId = selectedIndex;
       return;
     }
+    
+    // check if node is overlapping a previous node
+    if(this.#overlappingNode(x, y)) return;
 
-    this.nodes.push({ x, y })
+    // desselect any selected node & create a new node
+    this.#deselectNode();
+    this.nodes.push({ x, y });
   }
 
   /**
@@ -73,6 +87,10 @@ class Graph {
    * @return {boolean}
    */
   #overlappingNode(x, y) {
+    for(let node of this.nodes) {
+      if(squareDistance(x, y, node.x, node.y) < nodeDiameter ** 2) return node;
+    }
+    return false;
   }
 
   /**
@@ -112,6 +130,12 @@ class Graph {
   #addEdge(nodeOnePosition, nodeTwoPosition) {
     this.nodes[nodeOnePosition].neighbour = nodeTwoPosition;
     this.nodes[nodeTwoPosition].neighbour = nodeOnePosition;
+  }
+
+  #deselectNode() {
+    if(this.#currentId == -1) return;
+    this.nodes[this.#currentId].selected = false; // mark node as not selected
+    this.#currentId = -1;
   }
 
 }
