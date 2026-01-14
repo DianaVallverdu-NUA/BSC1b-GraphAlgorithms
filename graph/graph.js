@@ -50,7 +50,12 @@ class Graph {
 
     // desselect any selected node & create a new node
     this.#deselectNode();
-    this.nodes.push({ x, y });
+
+
+    // create new node object -> this allows us to access the neighbours array & other props
+    let newNode = new Node(x, y, this.nodes.length);
+
+    this.nodes.push(newNode);
   }
 
   /**
@@ -112,9 +117,9 @@ class Graph {
    */
   #drawEdges() {
     for (let node of this.nodes) {
-      if (node.neighbour) {
-        let neighbourNode = this.nodes[node.neighbour];
-        line(node.x, node.y, neighbourNode.x, neighbourNode.y)
+      for(let neighbourId of node.neighbours) {
+        let neighbour = this.nodes[neighbourId];
+        line(node.x, node.y, neighbour.x, neighbour.y);
       }
     }
   }
@@ -128,8 +133,15 @@ class Graph {
    * @param {*} nodeTwoPosition
    */
   #addEdge(nodeOnePosition, nodeTwoPosition) {
-    this.nodes[nodeOnePosition].neighbour = nodeTwoPosition;
-    this.nodes[nodeTwoPosition].neighbour = nodeOnePosition;
+
+    // get node objects
+    let nodeOne = this.nodes[nodeOnePosition];
+    let nodeTwo = this.nodes[nodeTwoPosition];
+
+    // add as neighoburs
+    nodeOne.addNeighbour(nodeTwoPosition);
+    nodeTwo.addNeighbour(nodeOnePosition);
+
   }
 
   #deselectNode() {
